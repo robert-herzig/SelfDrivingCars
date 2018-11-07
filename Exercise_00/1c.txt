@@ -1,0 +1,46 @@
+/home/rob/anaconda3/envs/TorchGym/bin/python /home/rob/Documents/SelfDrivingCars/Exercise_00/exercise_pytorch.py
+Net(
+  (hidden): Linear(in_features=1, out_features=10, bias=True)
+  (predict): Linear(in_features=10, out_features=1, bias=True)
+)
+t:000, loss:0.6629
+t:005, loss:0.1006
+t:010, loss:0.0797
+t:015, loss:0.0730
+t:020, loss:0.0666
+t:025, loss:0.0602
+t:030, loss:0.0540
+t:035, loss:0.0480
+t:040, loss:0.0422
+t:045, loss:0.0369
+t:050, loss:0.0320
+t:055, loss:0.0277
+t:060, loss:0.0239
+t:065, loss:0.0207
+t:070, loss:0.0180
+t:075, loss:0.0158
+t:080, loss:0.0140
+t:085, loss:0.0126
+t:090, loss:0.0115
+t:095, loss:0.0106
+t:100, loss:0.0100
+t:105, loss:0.0095
+t:110, loss:0.0091
+t:115, loss:0.0088
+t:120, loss:0.0085
+t:125, loss:0.0084
+t:130, loss:0.0082
+t:135, loss:0.0081
+t:140, loss:0.0080
+t:145, loss:0.0079
+t:150, loss:0.0079
+t:155, loss:0.0078
+t:160, loss:0.0078
+t:165, loss:0.0077
+t:170, loss:0.0077
+t:175, loss:0.0076
+t:180, loss:0.0076
+t:185, loss:0.0075
+t:190, loss:0.0075
+t:195, loss:0.0074
+
