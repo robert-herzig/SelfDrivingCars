@@ -11,16 +11,27 @@ class ClassificationNetwork(nn.Module):
         Implementation of the network layers. The image size of the input
         observations is 96x96 pixels.
         """
-        super(ClassificationNetwork, self).__init__()
-        gpu = torch.device('cuda')
+        super().__init__()
+                
+        self.convelutions = nn.Sequential(
+            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=5, stride=1, padding=2),
+            nn.MaxPool2d(2, 2),
+            nn.ReLU(True),
+            nn.BatchNorm2d(32),
 
-        self.conv1 = nn.Conv2d(3, 12, 5)
-        self.conv2 = nn.Conv2d(12, 16, 5)
-        # an affine operation: y = Wx + b
-        # self.fc0 = nn.Linear(96 * 96 * 2, 16 * 5 * 5)
-        self.fc1 = nn.Linear(14112, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 9)
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=5, stride=1, padding=2),
+            nn.MaxPool2d(2, 2),
+            nn.ReLU(True),
+            nn.BatchNorm2d(32),
+
+        )
+
+        self.classification = nn.Sequential(
+            nn.Linear(32*24*24,512),
+            nn.ReLU(True),
+            nn.Linear(512,9)
+        )
+
 
 
     def forward(self, observation):
@@ -31,20 +42,13 @@ class ClassificationNetwork(nn.Module):
         observation:   torch.Tensor of size (batch_size, 96, 96, 3)
         return         torch.Tensor of size (batch_size, number_of_classes)
         """
+        observation = self.convelutions(observation)                        #calculate the Conv layers
+        observation = observation.view(observation.size(0),-1)              #flatten the layer
+        observation = F.softmax(self.classification(observation),dim=1)     #calculate the last layers and probabilities
 
-        self.cuda()
+        return observation
 
-        # Max pooling over a (2, 2) window
-        x = F.max_pool2d(F.relu(self.conv1(observation)), (2, 2))
-        # # If the size is a square you can only specify a single number
-        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
-        x = x.view(-1, )
-        # x = F.relu(self.fc0(observation))
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-
-        return x
+    
 
     def actions_to_classes(self, actions):
         """
@@ -130,22 +134,23 @@ class ClassificationNetwork(nn.Module):
         8: Idle
 
         """
+        dummy, max_idx = torch.max(scores,1) # the output of the network is double not boolean 
 
-        if scores[0] == 1:
-            return (0, 1, 0)
-        elif scores[1] == 1:
+        if max_idx == 0:        #changed the conditions also
+            return (0, 0.1, 0)
+        elif max_idx == 1:
             return (0, 0, 1)
-        elif scores[2] == 1:
+        elif max_idx == 2:
             return (-1, 0, 0)
-        elif scores[3] == 1:
+        elif max_idx == 2:
             return (1, 0, 0)
-        elif scores[4] == 1:
-            return (-1, 1, 0)
-        elif scores[5] == 1:
-            return (1, 1, 0)
-        elif scores[6] == 1:
+        elif max_idx == 4:
+            return (-1, 0.1, 0)
+        elif max_idx == 5:
+            return (1, 0.1, 0)
+        elif max_idx == 6:
             return (-1, 0, 1)
-        elif scores[7] == 1:
+        elif max_idx == 7:
             return (1, 0, 1)
         else: #idle even if input has totally wrong format somehow
             return (0, 0, 0)
