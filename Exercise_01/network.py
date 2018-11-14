@@ -134,20 +134,21 @@ class ClassificationNetwork(nn.Module):
         8: Idle
 
         """
-        dummy, max_idx = torch.max(scores,1) # the output of the network is double not boolean 
+        dummy, max_idx = torch.max(scores,1) # the output of the network is double not boolean
+         
 
         if max_idx == 0:        #changed the conditions also
-            return (0, 0.1, 0)
+            return (0, 0.5, 0)
         elif max_idx == 1:
             return (0, 0, 1)
         elif max_idx == 2:
-            return (-1, 0, 0)
+            return (-1, 0.05, 0)
         elif max_idx == 2:
-            return (1, 0, 0)
+            return (1, 0.05, 0)
         elif max_idx == 4:
-            return (-1, 0.1, 0)
+            return (-1, 0.5, 0)
         elif max_idx == 5:
-            return (1, 0.1, 0)
+            return (1, 0.5, 0)
         elif max_idx == 6:
             return (-1, 0, 1)
         elif max_idx == 7:
