@@ -23,12 +23,17 @@ def load_imitations(data_folder):
     for file in files:
         full_array = np.load(os.path.join(data_folder, file))
         if "observation" in str(file):
+            # full_array = full_array.reshape(3, 96, 96)
+            # print("OBS SHAPE = " + str(full_array.shape))
             observations.append(full_array)
         else:
             actions.append(full_array)
 
     observations = np.array(observations)
     actions = np.array(actions)
+
+    print(observations.shape)
+    print(actions.shape)
 
     return observations, actions
 
@@ -46,16 +51,16 @@ def save_imitations(data_folder, actions, observations):
     observations:   python list of N numpy.ndarrays of size (96, 96, 3)
     actions:        python list of N numpy.ndarrays of size 3
     """
-    N=0
-    while os.path.exists(data_folder+'/action_%05d.npy' % N):
-        N=N+1
-    imitations_folder = os.path.join(data_folder, 'action_%05d.npy' % N)
-    np.save(imitations_folder,actions)
-    imitations_folder = os.path.join(data_folder, 'observation_%05d.npy' % N)
-    np.save(imitations_folder,observations)
+    n = 0
+    while os.path.exists(data_folder + '/action_%05d.npy' % n):
+        n = n + 1
 
-    
-
+    for action, observation in zip(actions, observations):
+        imitations_folder = os.path.join(data_folder, 'action_%05d.npy' % n)
+        np.save(imitations_folder, action)
+        imitations_folder = os.path.join(data_folder, 'observation_%05d.npy' % n)
+        np.save(imitations_folder, observation)
+        n += 1
 
 class ControlStatus:
     """
@@ -128,10 +133,12 @@ def record_imitations(imitations_folder):
             env.render()
 
         if status.save:
+            print("Save Imitations")
             save_imitations(imitations_folder, actions, observations)
             status.save = False
 
         status.stop = False
         env.close()
 
-
+# if __name__ == '__main__':
+#     load_imitations("./data/teacher")
