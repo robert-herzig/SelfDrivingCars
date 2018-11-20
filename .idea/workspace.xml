@@ -1,27 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a648a82e-f122-4eda-a2b9-9835c9a66420" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/action_00000.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/action_00001.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/action_00002.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/action_00003.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/action_00004.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/action_00005.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/action_00006.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/observation_00000.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/observation_00001.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/observation_00002.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/observation_00003.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/observation_00004.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/observation_00005.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/teacher_small/observation_00006.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/data/train.t7" beforeDir="false" afterPath="$PROJECT_DIR$/Exercise_01/data/train.t7" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/imitations.py" beforeDir="false" afterPath="$PROJECT_DIR$/Exercise_01/imitations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Exercise_01/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/network.py" beforeDir="false" afterPath="$PROJECT_DIR$/Exercise_01/network.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exercise_01/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/Exercise_01/training.py" afterDir="false" />
-    </list>
+    <list default="true" id="a648a82e-f122-4eda-a2b9-9835c9a66420" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,8 +83,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Exercise_01/training.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="69" column="74" selection-start-line="69" selection-start-column="74" selection-end-line="69" selection-end-column="74" />
+            <state relative-caret-position="191">
+              <caret line="63" selection-start-line="63" selection-end-line="63" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -344,8 +324,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Exercise_01/training.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="69" column="74" selection-start-line="69" selection-start-column="74" selection-end-line="69" selection-end-column="74" />
+        <state relative-caret-position="191">
+          <caret line="63" selection-start-line="63" selection-end-line="63" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
