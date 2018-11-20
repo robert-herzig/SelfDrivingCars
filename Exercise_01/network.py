@@ -191,27 +191,32 @@ class ClassificationNetwork(nn.Module):
 
         for action in actions:
             actions_np = action.numpy()
+            print(actions_np)
+            print("SHAPE: " + str(actions_np.shape))
 
-            # Input is {steer, gas, break}
-            steer_left = 0
-            steer_right = 0
-            gas = 0
-            brake = 0
+            try:
+                # Input is {steer, gas, break}
+                steer_left = 0
+                steer_right = 0
+                gas = 0
+                brake = 0
 
-            if actions_np[0] > 0.1:
-                steer_right = 1
-            elif actions_np[0] < -0.1:
-                steer_left = 1
+                if actions_np[0] > 0.1:
+                    steer_right = 1
+                elif actions_np[0] < -0.1:
+                    steer_left = 1
 
-            if actions_np[1] > 0:
-                gas = 1
-            elif actions_np[2] > 0:
-                brake = 1
+                if actions_np[1] > 0:
+                    gas = 1
+                elif actions_np[2] > 0:
+                    brake = 1
 
-            output = np.array([steer_right, steer_left, gas, brake])
-            output_torch = torch.from_numpy(output)
-            # print("OUTPUT: " + str(output))
-            actions_list.append(output_torch)
+                output = np.array([steer_right, steer_left, gas, brake])
+                output_torch = torch.from_numpy(output)
+                # print("OUTPUT: " + str(output))
+                actions_list.append(output_torch)
+            except: #JUST IN CASE FORMAT GOES CRAZY AGAIN
+                actions_list.append(torch.from_numpy(np.zeros(4)))
 
         return actions_list
 
