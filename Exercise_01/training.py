@@ -13,7 +13,7 @@ def train(data_folder, trained_network_file):
     gpu = torch.device('cuda')
     infer_action = ClassificationNetwork()
     infer_action.to(gpu)   #make the network run on the gpu
-    optimizer = torch.optim.Adam(infer_action.parameters(), lr=1e-4)
+    optimizer = torch.optim.Adam(infer_action.parameters(), lr=1e-3)
     observations, actions = load_imitations(data_folder)
     observations = [torch.Tensor(observation) for observation in observations]
     actions = [torch.Tensor(action) for action in actions]
@@ -23,7 +23,7 @@ def train(data_folder, trained_network_file):
     
 
     nr_epochs = 100
-    batch_size = 5
+    batch_size = 20
     number_of_classes = 9  # needs to be changed
     start_time = time.time()
 
@@ -42,10 +42,13 @@ def train(data_folder, trained_network_file):
                                          (-1, 96, 96, 3))
                 batch_gt = torch.reshape(torch.cat(batch_gt, dim=0),
                                          (-1, number_of_classes))
-               
-                
+                dim = list(batch_in.shape)
 
-                batch_out = infer_action(batch_in.permute(0,3,1,2))    #changed the order of dimensions
+                speed, abs_sensors, steering, gyroscope = infer_action.extract_sensor_values(batch_in,dim[0])
+               
+                sensors = torch.cat((speed, abs_sensors, steering, gyroscope),1)
+
+                batch_out = infer_action(batch_in.permute(0,3,1,2),sensors)    #changed the order of dimensions
                 loss = cross_entropy_loss(batch_out, batch_gt.float())  #targets can only be long
                                      
 
@@ -77,6 +80,7 @@ def cross_entropy_loss(batch_out, batch_gt):
     return          float
     """
     a=batch_out*batch_gt
+    a=torch.clamp(a,min=1e-12,max=1-1e-12)
     cross,_=torch.max(a,1)
     #print(a)
     output = - cross.log().sum()

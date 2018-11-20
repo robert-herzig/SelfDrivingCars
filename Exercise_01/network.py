@@ -25,16 +25,26 @@ class ClassificationNetwork(nn.Module):
             nn.BatchNorm2d(32),
 
         )
-
-        self.classification = nn.Sequential(
+        self.linear01 = nn.Sequential(
             nn.Linear(32*24*24,512),
             nn.ReLU(True),
-            nn.Linear(512,9)
+            nn.Linear(512,14)
+        )
+
+        self.sensor_net = nn.Sequential(
+            nn.Linear(7,14),
+            nn.ReLU(True),
+        )
+
+        self.classification = nn.Sequential(
+            nn.Linear(28,18),
+            nn.ReLU(True),
+            nn.Linear(18,9)
         )
 
 
 
-    def forward(self, observation):
+    def forward(self, observation,sensors):
         """
         1.1 e)
         The forward pass of the network. Returns the prediction for the given
@@ -43,7 +53,12 @@ class ClassificationNetwork(nn.Module):
         return         torch.Tensor of size (batch_size, number_of_classes)
         """
         observation = self.convelutions(observation)                        #calculate the Conv layers
+        sensors     = self.sensor_net(sensors)
         observation = observation.view(observation.size(0),-1)              #flatten the layer
+        observation = self.linear01(observation)
+        sensors     = sensors.view(sensors.size(0),-1)
+        observation = torch.cat((observation, sensors),1)
+        
         observation = F.softmax(self.classification(observation),dim=1)     #calculate the last layers and probabilities
 
         return observation
@@ -138,7 +153,7 @@ class ClassificationNetwork(nn.Module):
          
 
         if max_idx == 0:        #changed the conditions also
-            return (0, 0.5, 0)
+            return (0, 0.1, 0)
         elif max_idx == 1:
             return (0, 0, 1)
         elif max_idx == 2:
@@ -146,9 +161,9 @@ class ClassificationNetwork(nn.Module):
         elif max_idx == 2:
             return (1, 0.05, 0)
         elif max_idx == 4:
-            return (-1, 0.5, 0)
+            return (-1, 0.1, 0)
         elif max_idx == 5:
-            return (1, 0.5, 0)
+            return (1, 0.1, 0)
         elif max_idx == 6:
             return (-1, 0, 1)
         elif max_idx == 7:

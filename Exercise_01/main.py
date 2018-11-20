@@ -19,7 +19,7 @@ def evaluate():
     infer_action.eval()
     env = gym.make('CarRacing-v0')
     # you can set it to torch.device('cuda') in case you have a gpu
-    device = torch.device('cpu')
+    device = torch.device('cuda')
     infer_action = infer_action.to(device)
 
 
@@ -29,8 +29,14 @@ def evaluate():
         reward_per_episode = 0
         for t in range(500):
             env.render()
-            action_scores = infer_action(torch.Tensor(
-                np.ascontiguousarray(observation[None])).to(device).permute(0,3,1,2))
+            input_to_net=torch.Tensor(
+                np.ascontiguousarray(observation[None])).to(device)
+            dim = list(input_to_net.shape)
+
+            speed, abs_sensors, steering, gyroscope = infer_action.extract_sensor_values(input_to_net,dim[0])
+               
+            sensors = torch.cat((speed, abs_sensors, steering, gyroscope),1)
+            action_scores = infer_action(input_to_net.permute(0,3,1,2),sensors)
 
             steer, gas, brake = infer_action.scores_to_action(action_scores)
             observation, reward, done, info = env.step([steer, gas, brake])
