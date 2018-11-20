@@ -51,8 +51,16 @@ def save_imitations(data_folder, actions, observations):
     observations:   python list of N numpy.ndarrays of size (96, 96, 3)
     actions:        python list of N numpy.ndarrays of size 3
     """
-    pass
+    n = 0
+    while os.path.exists(data_folder + '/action_%05d.npy' % n):
+        n = n + 1
 
+    for action, observation in zip(actions, observations):
+        imitations_folder = os.path.join(data_folder, 'action_%05d.npy' % n)
+        np.save(imitations_folder, action)
+        imitations_folder = os.path.join(data_folder, 'observation_%05d.npy' % n)
+        np.save(imitations_folder, observation)
+        n += 1
 
 class ControlStatus:
     """
@@ -125,6 +133,7 @@ def record_imitations(imitations_folder):
             env.render()
 
         if status.save:
+            print("Save Imitations")
             save_imitations(imitations_folder, actions, observations)
             status.save = False
 

@@ -7,9 +7,9 @@ import gym
 from training import train
 from imitations import record_imitations
 
-directory = "/home/benbarka/Desktop/Autonomous Driving Cars/SelfDrivingCars/Exercise_01"  ######## change that! ########
+directory = "/home/rob/Documents/SelfDrivingCars/SelfDrivingCars/Exercise_01/"
 trained_network_file = os.path.join(directory, 'data/train.t7')
-imitations_folder = os.path.join(directory, 'data/teacher')
+imitations_folder = os.path.join(directory, 'data/teacher_small')
 
 
 def evaluate():

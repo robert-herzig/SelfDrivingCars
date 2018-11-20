@@ -3,6 +3,7 @@ import random
 import time
 from network import ClassificationNetwork
 from imitations import load_imitations
+from torch.nn import functional
 import numpy as np
 
 
@@ -10,21 +11,37 @@ def train(data_folder, trained_network_file):
     """
     Function for training the network.
     """
+    print("START TRAINING")
+
+    use_multi_binary_class = True#TODO: Make this a parameter or smth
+    use_sensors = True
+
     gpu = torch.device('cuda')
-    infer_action = ClassificationNetwork()
+    infer_action = ClassificationNetwork(use_sensors=use_sensors, use_multi_binary=use_multi_binary_class)
     infer_action.to(gpu)   #make the network run on the gpu
-    optimizer = torch.optim.Adam(infer_action.parameters(), lr=1e-4)
+    optimizer = torch.optim.Adam(infer_action.parameters(), lr=1e-4 * 5)
     observations, actions = load_imitations(data_folder)
     observations = [torch.Tensor(observation) for observation in observations]
     actions = [torch.Tensor(action) for action in actions]
 
-    batches = [batch for batch in zip(observations,
+
+    if use_multi_binary_class:
+        batches = [batch for batch in zip(observations,
+                                          infer_action.infer_to_multi_class(actions))]
+        # print(batches[0])
+    else:
+        batches = [batch for batch in zip(observations,
                                       infer_action.actions_to_classes(actions))]
+        # print(batches[0])
     
 
-    nr_epochs = 100
-    batch_size = 5
-    number_of_classes = 9  # needs to be changed
+    nr_epochs = 10
+    batch_size = 1
+
+    if use_multi_binary_class:
+        number_of_classes = 4
+    else:
+        number_of_classes = 9  # needs to be changed
     start_time = time.time()
 
     for epoch in range(nr_epochs):
@@ -46,7 +63,13 @@ def train(data_folder, trained_network_file):
                 
 
                 batch_out = infer_action(batch_in.permute(0,3,1,2))    #changed the order of dimensions
-                loss = cross_entropy_loss(batch_out, batch_gt.float())  #targets can only be long
+
+                if use_multi_binary_class:
+                    # print("TARGET: " + str(batch_gt))
+                    # print("OUTPUT: " + str(batch_out))
+                    loss = functional.mse_loss(batch_out, batch_gt.float())
+                else:
+                    loss = cross_entropy_loss(batch_out, batch_gt.float())  #targets can only be long
                                      
 
                 optimizer.zero_grad()
