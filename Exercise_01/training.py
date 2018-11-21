@@ -13,7 +13,7 @@ def train(data_folder, trained_network_file):
     """
     print("START TRAINING")
 
-    use_multi_binary_class = True#TODO: Make this a parameter or smth
+    use_multi_binary_class = False  #TODO: Make this a parameter or smth
     use_sensors = True
 
     gpu = torch.device('cuda')
@@ -35,8 +35,8 @@ def train(data_folder, trained_network_file):
         # print(batches[0])
     
 
-    nr_epochs = 10
-    batch_size = 1
+    nr_epochs = 100
+    batch_size = 128
 
     if use_multi_binary_class:
         number_of_classes = 4
@@ -62,7 +62,7 @@ def train(data_folder, trained_network_file):
                
                 
 
-                batch_out = infer_action(batch_in.permute(0,3,1,2))    #changed the order of dimensions
+                batch_out = infer_action(batch_in)    #changed the order of dimensions
 
                 if use_multi_binary_class:
                     # print("TARGET: " + str(batch_gt))
@@ -100,6 +100,7 @@ def cross_entropy_loss(batch_out, batch_gt):
     return          float
     """
     a=batch_out*batch_gt
+    a = torch.clamp(a, min=1e-12, max=1 - 1e-12)
     cross,_=torch.max(a,1)
     #print(a)
     output = - cross.log().sum()

@@ -7,9 +7,9 @@ import gym
 from training import train
 from imitations import record_imitations
 
-directory = "/home/rob/Documents/SelfDrivingCars/SelfDrivingCars/Exercise_01/"
+directory = os.getcwd()
 trained_network_file = os.path.join(directory, 'data/train.t7')
-imitations_folder = os.path.join(directory, 'data/teacher_small')
+imitations_folder = os.path.join(directory, 'data/teacher')
 
 
 def evaluate():
@@ -30,7 +30,7 @@ def evaluate():
         for t in range(500):
             env.render()
             action_scores = infer_action(torch.Tensor(
-                np.ascontiguousarray(observation[None])).to(device).permute(0,3,1,2))
+                np.ascontiguousarray(observation[None])).to(device))
 
             steer, gas, brake = infer_action.scores_to_action(action_scores)
             observation, reward, done, info = env.step([steer, gas, brake])

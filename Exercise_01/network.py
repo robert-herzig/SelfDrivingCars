@@ -13,7 +13,7 @@ class ClassificationNetwork(nn.Module):
         """
         super().__init__()
 
-        print("Create network with " + str(use_sensors) + "," + str(use_multi_binary))
+        print("Create network with these parameters: SENSORS " + str(use_sensors) + ", MULTICLASS " + str(use_multi_binary))
 
         self.use_sensors = use_sensors
         self.use_multi_binary = use_multi_binary
@@ -80,17 +80,18 @@ class ClassificationNetwork(nn.Module):
         if self.use_sensors:
             # observation = observation.permute(0, 3, 1, 2)
             # print(observation.size())
-            observation_ch_last = observation.permute(0, 2, 3, 1)
+            #observation_ch_last = observation.permute(0, 2, 3, 1)
             # obs_list = []
             # for tobs in observation_ch_last:
             #     obs_list.append(tobs)
             # print(observation_ch_last.size())
             # obs_list = np.array(obs_list)
+            #print(observation.shape)
 
 
-            speed, abs_sensors, steering, gyroscope = self.extract_sensor_values(observation_ch_last, 1)
+            speed, abs_sensors, steering, gyroscope = self.extract_sensor_values(observation, observation.shape[0])
             sensor_inputs = torch.cat((speed, abs_sensors, steering, gyroscope), 1)
-            image_input = observation
+            image_input = observation.permute(0,3,1,2)
 
             conv_outputs = self.convolutions(image_input)
             conv_outputs = conv_outputs.view(conv_outputs.size(0), -1)
@@ -157,7 +158,7 @@ class ClassificationNetwork(nn.Module):
 
             if actions_np[0] > 0: #right
                 if actions_np[1] > 0 or actions_np[2] > 0: #gas or brake
-                    if actions_np[1] > actions_mse_lossnp[2]: # gas right
+                    if actions_np[1] > actions_np[2]: # gas right
                         output_int = 5
                     else: #brake right
                         output_int = 7#only right
@@ -264,7 +265,7 @@ class ClassificationNetwork(nn.Module):
 
 
         else:
-            print("SCORES without multiclasses")
+            #print("SCORES without multiclasses")
             dummy, max_idx = torch.max(scores,1) # the output of the network is double not boolean
 
             if max_idx == 0:        #changed the conditions also
@@ -286,7 +287,6 @@ class ClassificationNetwork(nn.Module):
             else: #idle even if input has totally wrong format somehow
                 return (0, 0, 0)
 
-
     def extract_sensor_values(self, observation, batch_size):
         """
         observation:    python list of batch_size many torch.Tensors of size
@@ -299,14 +299,7 @@ class ClassificationNetwork(nn.Module):
         """
         speed_crop = observation[:, 84:94, 12, 0].reshape(batch_size, -1)
         speed = speed_crop.sum(dim=1, keepdim=True) / 255
-
-        # abs_crop_b4 = observation[:, 84:94, 18:25:2, 2]
-        # print("SHAPE OF abs_crop before reshape: " + str(abs_crop_b4.shape))
-
-
         abs_crop = observation[:, 84:94, 18:25:2, 2].reshape(batch_size, 10, 4)
-        # abs_crop = abs_crop_b4
-        # print(abs_crop.shape)
         abs_sensors = abs_crop.sum(dim=1) / 255
         steer_crop = observation[:, 88, 38:58, 1].reshape(batch_size, -1)
         steering = steer_crop.sum(dim=1, keepdim=True)
