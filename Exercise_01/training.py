@@ -10,14 +10,23 @@ import numpy as np
 def train(data_folder, trained_network_file):
     """
     Function for training the network.
+
+    As we were not supposed to change the main file, you can change all the parameters here:
+    Available (boolean) variables:
+    use_sensors -> Ex 2a, use the extract sensor data in addition to images
+    use_multi_binary_class -> Ex 2b, take 4 binary classes as output instead of control classes
+    use_regression -> Ex 2c, formulate the problem as a regression task
+
     """
     print("START TRAINING")
 
     use_multi_binary_class = False  #TODO: Make this a parameter or smth
     use_sensors = True
+    use_regression = True
 
     gpu = torch.device('cuda')
-    infer_action = ClassificationNetwork(use_sensors=use_sensors, use_multi_binary=use_multi_binary_class)
+    infer_action = ClassificationNetwork(use_sensors=use_sensors, use_multi_binary=use_multi_binary_class,
+                                         use_regression=use_regression)
     infer_action.to(gpu)   #make the network run on the gpu
     optimizer = torch.optim.Adam(infer_action.parameters(), lr=1e-4 * 5)
     observations, actions = load_imitations(data_folder)
@@ -29,6 +38,9 @@ def train(data_folder, trained_network_file):
         batches = [batch for batch in zip(observations,
                                           infer_action.infer_to_multi_class(actions))]
         # print(batches[0])
+    elif use_regression:
+        batches = [batch for batch in zip(observations,
+                                          actions)]
     else:
         batches = [batch for batch in zip(observations,
                                       infer_action.actions_to_classes(actions))]
@@ -40,6 +52,8 @@ def train(data_folder, trained_network_file):
 
     if use_multi_binary_class:
         number_of_classes = 4
+    elif use_regression:
+        number_of_classes = 3 #Not really classes but this defines our output size
     else:
         number_of_classes = 9  # needs to be changed
     start_time = time.time()
@@ -68,6 +82,8 @@ def train(data_folder, trained_network_file):
                     # print("TARGET: " + str(batch_gt))
                     # print("OUTPUT: " + str(batch_out))
                     loss = functional.mse_loss(batch_out, batch_gt.float())
+                elif use_regression:
+                    loss =functional.mse_loss(batch_out, batch_gt.float())
                 else:
                     loss = cross_entropy_loss(batch_out, batch_gt.float())  #targets can only be long
                                      

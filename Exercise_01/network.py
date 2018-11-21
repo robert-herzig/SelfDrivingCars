@@ -5,19 +5,31 @@ import torch.nn.functional as F
 
 
 class ClassificationNetwork(nn.Module):
-    def __init__(self, use_sensors = False, use_multi_binary = False):
+    def __init__(self, use_sensors = False, use_multi_binary = False, use_regression = False):
         """
         1.1 d)
         Implementation of the network layers. The image size of the input
         observations is 96x96 pixels.
+
+        As we tried to get all the tasks into this one class, this gets weirdly complex and encapsulated
+        in a lot of if statements. Sorry for that.
         """
         super().__init__()
 
         print("Create network with these parameters: SENSORS " + str(use_sensors) + ", MULTICLASS " + str(use_multi_binary))
 
+
+        """
+        These variables are needed to define the networks for the tasks 2 a, b, and c
+        """
         self.use_sensors = use_sensors
         self.use_multi_binary = use_multi_binary
-                
+        self.use_regression = use_regression
+
+        """
+        As we need the image as an input in any case, this stays constant. 
+        Of course, this is not the perfect network for this task, but it works.
+        """
         self.convolutions = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=5, stride=1, padding=2),
             nn.MaxPool2d(2, 2),
@@ -30,6 +42,9 @@ class ClassificationNetwork(nn.Module):
             nn.BatchNorm2d(32),
         )
 
+        """
+        This is actually just used if we have use_sensors=True, just for safety we create it always
+        """
         self.sensor_net = nn.Sequential(
             nn.Linear(7, 128),
             nn.ReLU(True),
@@ -37,6 +52,14 @@ class ClassificationNetwork(nn.Module):
         )
 
 
+        """
+        First: Do we use sensors or not?  -> split accordingly
+        Second: Multi binary classes (4 of those),
+                action classes from first task (9 here),
+                or regression (with the 3 variables steer, gas, brake 
+                
+        Suboptimal, probably: We just concatenate the sensor-net output with the conv output
+        """
         if self.use_sensors:
             if self.use_multi_binary:
                 self.classification = nn.Sequential(
@@ -44,6 +67,13 @@ class ClassificationNetwork(nn.Module):
                     nn.ReLU(True),
                     nn.Linear(512, 4),
                     nn.Sigmoid()
+                )
+            elif self.use_regression:
+                print("USE REGRESSION AND SENSORS")
+                self.classification = nn.Sequential(
+                    nn.Linear(32 * 24 * 24 + 128, 512),
+                    nn.ReLU(True),
+                    nn.Linear(512, 3)
                 )
             else:
                 self.classification = nn.Sequential(
@@ -58,6 +88,13 @@ class ClassificationNetwork(nn.Module):
                     nn.ReLU(True),
                     nn.Linear(512, 4),
                     nn.Sigmoid()
+                )
+            elif self.use_regression:
+                print("USE REGRESSION WITHOUT SENSORS")
+                self.classification = nn.Sequential(
+                    nn.Linear(32 * 24 * 24, 512),
+                    nn.ReLU(True),
+                    nn.Linear(512, 3)
                 )
             else:
                 self.classification = nn.Sequential(
@@ -102,6 +139,8 @@ class ClassificationNetwork(nn.Module):
 
             if self.use_multi_binary:
                 observation = self.classification(total_outputs)
+            elif self.use_regression:
+                observation = self.classification(total_outputs)
             else:
                 observation = F.softmax(self.classification(total_outputs),dim=1)     #calculate the last layers and probabilities
 
@@ -115,6 +154,8 @@ class ClassificationNetwork(nn.Module):
             conv_outputs = conv_outputs.view(conv_outputs.size(0), -1)
 
             if self.use_multi_binary:
+                observation = self.classification(conv_outputs)
+            elif self.use_regression:
                 observation = self.classification(conv_outputs)
             else:
                 observation = F.softmax(self.classification(conv_outputs),
@@ -262,8 +303,9 @@ class ClassificationNetwork(nn.Module):
                 brake = 1
 
             return(steer_angle, gas, brake)
-
-
+        elif self.use_regression:
+            scores = scores.data.numpy()[0]
+            return (scores[0], scores[1], scores[2]) # We don't need to change anything here
         else:
             #print("SCORES without multiclasses")
             dummy, max_idx = torch.max(scores,1) # the output of the network is double not boolean
