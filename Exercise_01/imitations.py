@@ -53,7 +53,7 @@ def save_imitations(data_folder, actions, observations):
     """
     n = 0
     while os.path.exists(data_folder + '/action_%05d.npy' % n):
-        n = n + 1
+        n += 1
 
     for action, observation in zip(actions, observations):
         imitations_folder = os.path.join(data_folder, 'action_%05d.npy' % n)
