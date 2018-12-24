@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 from scipy.interpolate import splprep, splev
 from scipy.optimize import minimize
+from scipy import ndimage
 import time
 
 
@@ -18,7 +19,8 @@ class LaneDetection:
 
     '''
 
-    def __init__(self, cut_size=68, spline_smoothness=10, gradient_threshold=14, distance_maxima_gradient=3):
+
+    def __init__(self, cut_size=68, spline_smoothness=10, gradient_threshold=60, distance_maxima_gradient=3):
         self.car_position = np.array([48,0])
         self.spline_smoothness = spline_smoothness
         self.cut_size = cut_size
@@ -30,8 +32,8 @@ class LaneDetection:
 
     def cut_gray(self, state_image_full):
         '''
-        ##### TODO #####
-        This function should cut the imagen at the front end of the car (e.g. pixel row 68) 
+        ##### TODO ##### DONE
+        This function should cut the image at the front end of the car (e.g. pixel row 68)
         and translate to grey scale
 
         input:
@@ -41,13 +43,16 @@ class LaneDetection:
             gray_state_image 68x96x1
 
         '''
+
+        cropped_image = state_image_full[0:self.cut_size, :, :]                  #crop the input image
+        gray_state_image=np.dot(cropped_image[..., :3], [0.299, 0.587, 0.114])   #convert to gray scale
         
         return gray_state_image[::-1] 
 
 
     def edge_detection(self, gray_image):
         '''
-        ##### TODO #####
+        ##### TODO ##### DONE
         In order to find edges in the gray state image, 
         this function should derive the absolute gradients of the gray state image.
         Derive the absolute gradients using numpy for each pixel. 
@@ -60,6 +65,10 @@ class LaneDetection:
             gradient_sum 68x96x1
 
         '''
+        kx = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]])              #defining a kernel for finding the x axis gradients
+        gradient_sum = np.absolute(ndimage.convolve(gray_image, kx))     #making a convolution
+        ind_low_grd = gradient_sum < self.gradient_threshold             #finding indexes of low gradients
+        gradient_sum[ind_low_grd]=0                                      #setting low gradients to zero
         
         return gradient_sum
 
@@ -78,6 +87,15 @@ class LaneDetection:
             maxima (np.array) 2x Number_maxima
 
         '''
+        argmaxima = []
+        i=0
+
+        for row in gradient_sum:
+            peaks = find_peaks(row, distance=self.distance_maxima_gradient)[0]
+            while len(peaks) > 0:
+                argmaxima.append([peaks[0],i])
+                peaks = np.delete(peaks,0)
+            i+=1
 
         return argmaxima
 
@@ -105,7 +123,7 @@ class LaneDetection:
         while not lanes_found:
             
             # Find peaks with min distance of at least 3 pixel 
-            argmaxima = find_peaks(gradient_sum[row],distance=3)[0]
+            argmaxima = find_peaks(gradient_sum[row],distance=self.distance_maxima_gradient)[0]
 
             # if one lane_boundary is found
             if argmaxima.shape[0] == 1:
@@ -182,6 +200,82 @@ class LaneDetection:
             # lane_boundary 2
 
             ################
+
+            while len(maxima) > 0:
+                min1 = 10
+                min_ind1 = 0
+                i = 0
+                broken = False
+
+                while i < len(maxima):
+
+                    x1, y1 = lane_boundary1_points[-1]
+                    x2, y2 = maxima[i]
+
+                    dis1 = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+                    if dis1 == 0 :
+                        maxima = np.delete(maxima, i, 0)
+                        broken = True
+                        break
+                    if dis1 < min1 :
+                        min1 = dis1
+                        min_ind1 = i
+                    i += 1
+
+                if broken:
+                    continue
+
+                if min1 < 10:
+                    lane_boundary1_points = np.concatenate(
+                        (lane_boundary1_points, np.reshape(maxima[min_ind1], (1, 2))), axis=0)
+                    maxima = np.delete(maxima, min_ind1, 0)
+                else:
+                    break
+
+
+
+            while len(maxima) > 0:
+                min2 = 10
+                min_ind2 = 0
+                i=0
+                broken = False
+
+                while i < len(maxima) :
+
+                    x1, y1 = lane_boundary2_points[-1]
+                    x2, y2 = maxima[i]
+
+                    dis2 = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+                    if dis2 == 0:
+                        maxima = np.delete(maxima, i, 0)
+                        broken = True
+                        break
+                    if dis2 < min2:
+                        min2 = dis2
+                        min_ind2 = i
+                    i += 1
+
+                if broken:
+                    continue
+
+
+                if min2 < 10:
+                    lane_boundary2_points = np.concatenate(
+                        (lane_boundary2_points, np.reshape(maxima[min_ind2], (1, 2))), axis=0)
+                    maxima = np.delete(maxima, min_ind2, 0)
+                else:
+                    break
+
+
+
+            '''print(lane_boundary1_points.shape[0])
+            print(lane_boundary1_points)
+            print(lane_boundary2_points.shape[0])
+            print(lane_boundary2_points)'''
+
+
+
+
             
 
             ##### TODO #####
@@ -196,6 +290,20 @@ class LaneDetection:
                 # lane_boundary 1
 
                 # lane_boundary 2
+                x=[col[0] for col in lane_boundary1_points]
+                y=[col[1] for col in lane_boundary1_points]
+
+                lane_boundary1, u1 = splprep([x,y],s=self.spline_smoothness)
+                #lane_boundary1 = splev(u1, tck1)
+
+                x = [col[0] for col in lane_boundary2_points]
+                y = [col[1] for col in lane_boundary2_points]
+
+                lane_boundary2, u2 = splprep([x,y], s=self.spline_smoothness)
+                #lane_boundary2 = splev(u2, tck2)
+
+                #print(lane_boundary1)
+                #print(lane_boundary2)
                 
             else:
                 lane_boundary1 = self.lane_boundary1_old
@@ -208,6 +316,7 @@ class LaneDetection:
 
         self.lane_boundary1_old = lane_boundary1
         self.lane_boundary2_old = lane_boundary2
+
 
         # output the spline
         return lane_boundary1, lane_boundary2
