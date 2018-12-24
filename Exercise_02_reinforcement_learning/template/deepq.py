@@ -8,6 +8,8 @@ from replay_buffer import ReplayBuffer
 from schedule import LinearSchedule
 from utils import get_state, visualize_training
 import os
+from pympler.tracker import SummaryTracker
+
 
 def evaluate(env, load_path='agent.pt'):
     """ Evaluate a trained model and compute your leaderboard scores
@@ -62,10 +64,10 @@ def evaluate(env, load_path='agent.pt'):
 
 def learn(env,
           lr=1e-4,
-          total_timesteps=100000,
-          buffer_size=20000,
-          exploration_fraction=0.1,
-          exploration_final_eps=0.02,
+          total_timesteps=800000,
+          buffer_size=12000,
+          exploration_fraction=0.05,
+          exploration_final_eps=0.05,
           train_freq=1,
           action_repeat=4,
           batch_size=32,
@@ -103,13 +105,15 @@ def learn(env,
     model_identifier: string
         identifier of the agent
     """
-    episode_rewards = [0.0]
+
+    episode_rewards = 0.0
     training_losses = []
     actions = get_action_set()
     action_size = len(actions)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     termination_reward = -1000
-    file_counter=0
+    fh1 = open('reward.txt', 'w')
+    fh2 = open('training.txt', 'w')
 
     # Build networks
     policy_net = DQN(action_size, device).to(device)
@@ -134,6 +138,7 @@ def learn(env,
     # Iterate over the total number of time steps
     for t in range(total_timesteps):
 
+
         # Select action
         action_id = select_exploratory_action(obs, policy_net, action_size, exploration, t)
         env_action = actions[action_id]
@@ -141,8 +146,8 @@ def learn(env,
         # Perform action frame_skip-times
         for f in range(action_repeat):
             new_obs, rew, done, _ = env.step(env_action)
-            episode_rewards[-1] += rew
-            if episode_rewards[-1] < termination_reward:
+            episode_rewards += rew
+            if episode_rewards < termination_reward:
                 done = True
             if done:
                 break
@@ -152,29 +157,43 @@ def learn(env,
         replay_buffer.add(obs, action_id, rew, new_obs, float(done))
         obs = new_obs
 
+
         if done:
             # Start new episode after previous episode has terminated
-            print("timestep: " + str(t) + " \t reward: " + str(episode_rewards[-1]))
+            print("timestep: " + str(t) + " \t reward: " + str(episode_rewards))
             obs = get_state(env.reset())
-            episode_rewards.append(0.0)
+            fh1.write('%.5f\n' % episode_rewards)
+            episode_rewards = 0.0
+            #episode_rewards.append(0.0)
 
         if t > learning_starts and t % train_freq == 0:
             # Minimize the error in Bellman's equation on a batch sampled from replay buffer.
+
             loss = perform_qlearning_step(policy_net, target_net, optimizer, replay_buffer, batch_size, gamma, device)
+            fh2.write('%.5f\n' % loss)
+
             #training_losses.append(loss)
 
         if t > learning_starts and t % target_network_update_freq == 0:
             # Update target network periodically.
             update_target_net(policy_net, target_net)
 
-        """if t % 500 == 0:
-            # save episode_rewards and training_losses
+
+
+        '''if t % 1000 == 0:
+            tracker = SummaryTracker()
+            tracker.print_diff()
+
+            ''# save episode_rewards and training_losses
             cwd = os.getcwd()
             data_file = os.path.join(cwd, '/data_0%i' %file_counter)
             np.savez(data_file,episode_rewards,training_losses)
             episode_rewards = [0.0]
             training_losses = []
-            file_counter+="""
+            file_counter+='''
+
+    fh1.close()
+    fh2.close()
 
 
     # Save the trained policy network
