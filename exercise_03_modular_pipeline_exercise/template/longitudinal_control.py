@@ -13,7 +13,7 @@ class LongitudinalController:
         PID_step()
         control()
     '''
-    def __init__(self, KP=0.01, KI=0.0, KD=0.0):
+    def __init__(self, KP=0.5, KI=0.0, KD=0.0):
         self.last_error = 0
         self.sum_error = 0
         self.last_control = 0
@@ -44,6 +44,11 @@ class LongitudinalController:
         # define error from set point target_speed to speed 
 
         # derive PID elements
+        error =  target_speed - speed
+
+        control = self.KP * error + self.KD * (error - self.last_error)
+
+        self.last_error = error
 
         return control
 
@@ -68,7 +73,7 @@ class LongitudinalController:
         # translate the signal from the PID controller 
         # to the action variables gas and brake
         if control >= 0:
-            gas = np.clip(control, 0, 0.8) 
+            gas = np.clip(control, 0, 0.8)
         else:
             brake = np.clip(-1*control, 0, 0.8)
 

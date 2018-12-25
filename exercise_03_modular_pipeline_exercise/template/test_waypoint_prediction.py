@@ -67,6 +67,7 @@ while True:
         print("step {} total_reward {:+0.2f}".format(steps, total_reward))
 
         LD_module.plot_state_lane(s, steps, fig, waypoints=waypoints)
+        #LD_module.plot_state_lane(s, steps, fig)
         
     steps += 1
     env.render()

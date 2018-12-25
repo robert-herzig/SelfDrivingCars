@@ -187,7 +187,7 @@ class LaneDetection:
         # if no lane was found,use lane_boundaries of the preceding step
         if lane_found:
             
-            ##### TODO #####
+            ##### TODO ##### DONE
             #  in every iteration: 
             # 1- find maximum/edge with the lowest distance to the last lane boundary point 
             # 2- append maxium to lane_boundary1_points or lane_boundary2_points
@@ -278,7 +278,7 @@ class LaneDetection:
 
             
 
-            ##### TODO #####
+            ##### TODO ##### DONE
             # spline fitting using scipy.interpolate.splprep 
             # and the arguments self.spline_smoothness
             # 
