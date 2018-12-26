@@ -42,13 +42,11 @@ def evaluate():
 
             # waypoint and target_speed prediction
             waypoints = waypoint_prediction(lane1, lane2)
-            target_speed = target_speed_prediction(waypoints, max_speed=100, exp_constant=5)
+            target_speed = target_speed_prediction(waypoints, max_speed=120, exp_constant=10)
 
             # control
             a[0] = LatC_module.stanley(waypoints, speed)
             a[1], a[2] = LongC_module.control(speed, target_speed)
-            #if a[0] > 0.5 or a[0] < -0.5:
-             #   a[1] = 0.05
 
             # reward
             reward_per_episode += r
@@ -97,13 +95,12 @@ def calculate_score_for_leaderboard():
 
             # waypoint and target_speed prediction
             waypoints = waypoint_prediction(lane1, lane2)
-            target_speed = target_speed_prediction(waypoints, max_speed=100, exp_constant=5)
+            target_speed = target_speed_prediction(waypoints, max_speed=120, exp_constant=12)
 
             # control
             a[0] = LatC_module.stanley(waypoints, speed)
             a[1], a[2] = LongC_module.control(speed, target_speed)
-            if a[0] > 0.5 or a[0] < -0.5:
-                a[1] = 0.05
+
 
             # reward
             reward_per_episode += r
