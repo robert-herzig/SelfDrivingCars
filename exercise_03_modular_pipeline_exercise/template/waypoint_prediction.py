@@ -42,7 +42,7 @@ def curvature(waypoints):
     return curvature
 
 
-def smoothing_objective(waypoints, waypoints_center, weight_curvature=40):
+def smoothing_objective(waypoints, waypoints_center, weight_curvature=30):
     '''
     Objective for path smoothing
 
@@ -60,7 +60,7 @@ def smoothing_objective(waypoints, waypoints_center, weight_curvature=40):
     return -1 * weight_curvature * curv + ls_tocenter
 
 
-def waypoint_prediction(roadside1_spline, roadside2_spline, num_waypoints=6, way_type = "smooth"):
+def waypoint_prediction(roadside1_spline, roadside2_spline, num_waypoints=12, way_type = "smooth"):
     '''
     ##### TODO #####
     Predict waypoint via two different methods:

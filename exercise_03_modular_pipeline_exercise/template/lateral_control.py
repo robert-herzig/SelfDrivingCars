@@ -19,11 +19,10 @@ class LateralController:
     '''
 
 
-    def __init__(self, gain_constant=3, damping_constant=1):
+    def __init__(self, gain_constant=0.5, damping_constant=0.0):
 
         self.gain_constant = gain_constant
         self.damping_constant = damping_constant
-        self.damping_constant2 = 0.1
         self.previous_steering_angle = 0
         self.previous_cross_track_error = 0
 
@@ -55,13 +54,7 @@ class LateralController:
         # prevent division by zero by adding as small epsilon
 
         # derive damping term
-        '''print(waypoints[0][0],waypoints[1][0])
-        print(waypoints[0][1],waypoints[1][1])
-        desired_vector_length = ((waypoints[0][0] - waypoints [1][0])**2 + (waypoints[1][0] - waypoints[1][1])**2)**0.5
-        desired_vector = [(waypoints[0][0] - waypoints [1][0])/desired_vector_length,(waypoints[1][0] - waypoints[1][1])/desired_vector_length]
-        print(desired_vector)
-        orientation_error = np.arcsin(np.cross([1,0],desired_vector))
-        print(orientation_error)'''
+
 
         desired_vector_length = ((waypoints[0][0] - waypoints[0][1]) ** 2 + (
         waypoints[1][0] - waypoints[1][1]) ** 2) ** 0.5
@@ -74,15 +67,18 @@ class LateralController:
 
 
         cross_track_error = waypoints[0][0] - 48
-        diff_cross_track_error = -(cross_track_error - self.previous_cross_track_error)
+        #diff_cross_track_error = -(cross_track_error - self.previous_cross_track_error)
 
-        steering_angle = orientation_error+ np.arctan((self.gain_constant*cross_track_error + self.damping_constant * diff_cross_track_error) / speed + 0.01)
+        #steering_angle = orientation_error+ np.arctan((self.gain_constant*cross_track_error + self.damping_constant * diff_cross_track_error) / speed + 0.01)
+        steering_angle = 0.5 * orientation_error+ np.arctan((self.gain_constant*cross_track_error ) / speed + 0.01)
+
         #print(steering_angle)
+        steering_angle = np.clip(steering_angle, -0.4, 0.4) / 0.4
 
-        steering_angle = steering_angle - self.damping_constant2 * (steering_angle - self.previous_steering_angle)
+        steering_angle = steering_angle - self.damping_constant * (steering_angle - self.previous_steering_angle)
         self.previous_steering_angle = steering_angle
         # clip to the maximum stering angle (0.4) and rescale the steering action space
-        return np.clip(steering_angle, -0.4, 0.4) / 0.4
+        return steering_angle
 
 
 
