@@ -47,10 +47,10 @@ class LaneDetection:
         """
         gray = 0.2989 * r + 0.5870 * g + 0.1140 * b | got that formula from stackoverflow
         """
-
+        print(state_image_full.shape)
         grayscale = np.dot(state_image_full[..., :3], [0.299, 0.587, 0.114]) #only :3 in case we have an alpha channel
         print(grayscale.shape)
-        gray_state_image = grayscale[:, :68]
+        gray_state_image = grayscale[:68, :]
         print(gray_state_image.shape)
         
         return gray_state_image[::-1] 
@@ -102,12 +102,21 @@ class LaneDetection:
         print("looking for peaks")
         print(gradient_sum.shape)
         for row_index in range(0, len(gradient_sum)):
-            rowpeaks, _ = find_peaks(gradient_sum[row_index], distance=10)
+            rowpeaks, _ = find_peaks(gradient_sum[row_index], distance=15)
             for peak in rowpeaks:
                 argmaxima_list.append([row_index, peak])
         print("ARGMAXIMA")
         print(argmaxima_list)
         argmaxima = np.array(argmaxima_list)
+        #Now convert from number_maxima x 2 to 2 x number_maxima
+
+        #do we actually want 2x num_maxima or the other way around?
+        # argmaxima = argmaxima.transpose(1, 0).reshape(2, argmaxima.shape[0])
+        # print("ARGMAXIMA AFTER TRANSPOSING:")
+
+        #TODO: Without transposing is better for our case, as we can more easily get the closest neighbours
+            ## -> prefer number_maxima x 2!
+        print(argmaxima.shape)
         return argmaxima
 
 
@@ -195,14 +204,28 @@ class LaneDetection:
         # first lane_boundary points
         lane_boundary1_points, lane_boundary2_points, lane_found = self.find_first_lane_point(gradient_sum)
 
+        lane_boundary1_points = np.array[lane_boundary1_points]
+        lane_boundary2_points = np.array(lane_boundary2_points)
         # if no lane was found,use lane_boundaries of the preceding step
         if lane_found:
             
             ##### TODO #####
             #  in every iteration: 
-            # 1- find maximum/edge with the lowest distance to the last lane boundary point 
+            # 1- find maximum/edge with the lowest distance to the last lane boundary point
+            print("FIND CLOSEST EDGE")
+            squared_distances = np.sum((maxima - lane_boundary1_points[-1])**2, axis=1)
+            print(squared_distances)
+
+            closest_index = np.argmin(squared_distances[0])
+            maximum = maxima[closest_index]
+            print("CLOSEST = " + str(closest_index))
+
             # 2- append maxium to lane_boundary1_points or lane_boundary2_points
+            lane_boundary1_points = np.append(lane_boundary1_points, maximum)
+
             # 3- delete maximum from maxima
+            maxima  = np.delete(maxima, closest_index)
+
             # 4- stop loop if there is no maximum left 
             #    or if the distance to the next one is too big (>=100)
 

@@ -1,7 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8aefc388-8b2d-48ba-93c8-9a008b03b9ef" name="Default Changelist" comment="" />
+    <list default="true" id="8aefc388-8b2d-48ba-93c8-9a008b03b9ef" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lane_detection.py" beforeDir="false" afterPath="$PROJECT_DIR$/lane_detection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../NuriUndRobert.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent_ts100000,bs10000,ef0.1,exp0.02,ar4,bat32,gm0.99.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent_ts100000,bs10000,ef0.5,exp0.02,ar4,bat32,gm0.99.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.75.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_lop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_nop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_policy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent_ts100000,bs10000,ef0.75,exp0.02,ar8,bat32,gm0.99.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent_ts100000,bs10000,ef0.9,exp0.02,ar4,bat32,gm0.99.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../episode_rewards-agent_ts200000,bs12000,ef0.75,exp0.02,ar4,bat32,gm0.999.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../report.odt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../report.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward_ts100000,bs10000,ef0.1,exp0.02,ar4,bat32,gm0.99.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward_ts100000,bs10000,ef0.5,exp0.02,ar4,bat32,gm0.99.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward_ts100000,bs10000,ef0.75,exp0.02,ar1,bat32,gm0.99.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.5.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.75.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_lop.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_nop.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_policy.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward_ts100000,bs10000,ef0.75,exp0.02,ar8,bat32,gm0.99.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../reward_ts100000,bs10000,ef0.9,exp0.02,ar4,bat32,gm0.99.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../rewardt_ts200000,bs12000,ef0.75,exp0.02,ar4,bat32,gm0.999.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent_ts100000,bs10000,ef0.1,exp0.02,ar4,bat32,gm0.99.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent_ts100000,bs10000,ef0.5,exp0.02,ar4,bat32,gm0.99.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.75.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_lop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_nop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_policy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent_ts100000,bs10000,ef0.75,exp0.02,ar8,bat32,gm0.99.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent_ts100000,bs10000,ef0.9,exp0.02,ar4,bat32,gm0.99.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_losses-agent_ts200000,bs12000,ef0.75,exp0.02,ar4,bat32,gm0.999.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_ts100000,bs10000,ef0.1,exp0.02,ar4,bat32,gm0.99.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_ts100000,bs10000,ef0.5,exp0.02,ar4,bat32,gm0.99.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_ts100000,bs10000,ef0.75,exp0.02,ar1,bat32,gm0.99.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.5.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.75.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_lop.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_nop.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_ts100000,bs10000,ef0.75,exp0.02,ar4,bat32,gm0.99_policy.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_ts100000,bs10000,ef0.75,exp0.02,ar8,bat32,gm0.99.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../training_ts100000,bs10000,ef0.9,exp0.02,ar4,bat32,gm0.99.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../trainingt_ts200000,bs12000,ef0.75,exp0.02,ar4,bat32,gm0.999.txt" beforeDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,8 +65,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lane_detection.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="33" column="20" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
+            <state relative-caret-position="326">
+              <caret line="117" column="43" selection-start-line="117" selection-start-column="43" selection-end-line="117" selection-end-column="43" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -23,19 +75,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/anaconda3/envs/GymOnly/lib/python3.5/site-packages/scipy/signal/_peak_finding.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="265" selection-start-line="265" selection-end-line="265" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_lane_detection.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="65" selection-start-line="65" selection-end-line="65" />
+            <state relative-caret-position="380">
+              <caret line="66" column="14" lean-forward="true" selection-start-line="66" selection-start-column="14" selection-end-line="66" selection-end-column="14" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -44,6 +87,15 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>argmin</find>
+      <find>closes</find>
+      <find>closest</find>
+      <find>closest =</find>
+      <find>cl</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
@@ -144,7 +196,14 @@
       <option name="project" value="LOCAL" />
       <updated>1548795303177</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Ex01 first tasks">
+      <created>1548800342094</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1548800342094</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -172,7 +231,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added ex03" />
-    <option name="LAST_COMMIT_MESSAGE" value="added ex03" />
+    <MESSAGE value="Ex01 first tasks" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ex01 first tasks" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/anaconda3/envs/GymOnly/lib/python3.5/site-packages/scipy/signal/_peak_finding.py">
@@ -184,8 +244,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test_lane_detection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="65" selection-start-line="65" selection-end-line="65" />
+        <state relative-caret-position="380">
+          <caret line="66" column="14" lean-forward="true" selection-start-line="66" selection-start-column="14" selection-end-line="66" selection-end-column="14" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -194,8 +254,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lane_detection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="33" column="20" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
+        <state relative-caret-position="326">
+          <caret line="117" column="43" selection-start-line="117" selection-start-column="43" selection-end-line="117" selection-end-column="43" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
