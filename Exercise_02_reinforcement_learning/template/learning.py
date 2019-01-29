@@ -39,28 +39,27 @@ def perform_qlearning_step(policy_net, target_net, optimizer, replay_buffer, bat
         8. Clip the gradients
         9. Optimize the model
     """
-    obs_batch,act_batch,rew_batch,next_obs_batch,done_mask=replay_buffer.sample(batch_size)
-    rew_tensor=torch.from_numpy(rew_batch).to("cuda")
-    rew_prediction=policy_net(obs_batch)
-    #rew_prediction=rew_prediction.detach().cpu().numpy()
+    obs_batch, act_batch, rew_batch, next_obs_batch, done_mask = replay_buffer.sample(batch_size)
+    rew_tensor = torch.from_numpy(rew_batch).to("cuda")
+    rew_prediction = policy_net(obs_batch)
+    # rew_prediction=rew_prediction.detach().cpu().numpy()
     next_rew_prediction = target_net(next_obs_batch)
-    #print(next_rew_prediction)
-    max_idx = torch.argmax(next_rew_prediction,1)
-    #print(max_idx)
-    #next_rew_prediction = next_rew_prediction.detach().cpu().numpy()
-    #print(rew_prediction[np.arange(batch_size),act_batch])
-    #print(rew_batch.shape)
-    #print(next_rew_prediction[np.arange(batch_size),max_idx])
-    #print(rew_prediction[np.arange(batch_size),act_batch])
-    loss=torch.mean(torch.pow(rew_tensor+gamma*next_rew_prediction[np.arange(batch_size),max_idx]-rew_prediction[np.arange(batch_size),act_batch],2))
+    # print(next_rew_prediction)
+    max_idx = torch.argmax(next_rew_prediction, 1)
+    # print(max_idx)
+    # next_rew_prediction = next_rew_prediction.detach().cpu().numpy()
+    # print(rew_prediction[np.arange(batch_size),act_batch])
+    # print(rew_batch.shape)
+    # print(next_rew_prediction[np.arange(batch_size),max_idx])
+    # print(rew_prediction[np.arange(batch_size),act_batch])
+    loss = torch.mean(torch.pow(
+        rew_tensor + gamma * next_rew_prediction[np.arange(batch_size), max_idx] - rew_prediction[
+            np.arange(batch_size), act_batch], 2))
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-    #print(loss)
+    # print(loss)
     return loss
-
-
-
 
 
 def update_target_net(policy_net, target_net):

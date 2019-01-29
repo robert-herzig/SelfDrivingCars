@@ -161,7 +161,7 @@ def learn(env,
         if t > learning_starts and t % train_freq == 0:
             # Minimize the error in Bellman's equation on a batch sampled from replay buffer.
             loss = perform_qlearning_step(policy_net, target_net, optimizer, replay_buffer, batch_size, gamma, device)
-            #training_losses.append(loss)
+            training_losses.append(loss)
 
         if t > learning_starts and t % target_network_update_freq == 0:
             # Update target network periodically.
